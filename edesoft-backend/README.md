@@ -1,131 +1,82 @@
 <!--
-title: 'Serverless Framework Python Flask API on AWS'
-description: 'This template demonstrates how to develop and deploy a simple Python Flask API running on AWS Lambda using the traditional Serverless Framework.'
+title: 'AWS Python Example'
+description: 'This template demonstrates how to deploy a Python function running on AWS Lambda using the traditional Serverless Framework.'
 layout: Doc
 framework: v3
 platform: AWS
-language: Python
+language: python
 priority: 2
 authorLink: 'https://github.com/serverless'
 authorName: 'Serverless, inc.'
 authorAvatar: 'https://avatars1.githubusercontent.com/u/13742415?s=200&v=4'
 -->
 
-# Serverless Framework Python Flask API on AWS
 
-This template demonstrates how to develop and deploy a simple Python Flask API service running on AWS Lambda using the traditional Serverless Framework.
+# Serverless Framework AWS Python Example
 
-
-## Anatomy of the template
-
-This template configures a single function, `api`, which is responsible for handling all incoming requests thanks to configured `httpApi` events. To learn more about `httpApi` event configuration options, please refer to [httpApi event docs](https://www.serverless.com/framework/docs/providers/aws/events/http-api/). As the events are configured in a way to accept all incoming requests, `Flask` framework is responsible for routing and handling requests internally. The implementation takes advantage of `serverless-wsgi`, which allows you to wrap WSGI applications such as Flask apps. To learn more about `serverless-wsgi`, please refer to corresponding [GitHub repository](https://github.com/logandk/serverless-wsgi). Additionally, the template relies on `serverless-python-requirements` plugin for packaging dependencies from `requirements.txt` file. For more details about `serverless-python-requirements` configuration, please refer to corresponding [GitHub repository](https://github.com/UnitedIncome/serverless-python-requirements).
+This template demonstrates how to deploy a Python function running on AWS Lambda using the traditional Serverless Framework. The deployed function does not include any event definitions as well as any kind of persistence (database). For more advanced configurations check out the [examples repo](https://github.com/serverless/examples/) which includes integrations with SQS, DynamoDB or examples of functions that are triggered in `cron`-like manner. For details about configuration of specific `events`, please refer to our [documentation](https://www.serverless.com/framework/docs/providers/aws/events/).
 
 ## Usage
 
-### Prerequisites
-
-In order to package your dependencies locally with `serverless-python-requirements`, you need to have `Python3.8` installed locally. You can create and activate a dedicated virtual environment with the following command:
-
-```bash
-python3.8 -m venv ./venv
-source ./venv/bin/activate
-```
-
-Alternatively, you can also use `dockerizePip` configuration from `serverless-python-requirements`. For details on that, please refer to corresponding [GitHub repository](https://github.com/UnitedIncome/serverless-python-requirements).
-
 ### Deployment
 
-This example is made to work with the Serverless Framework dashboard, which includes advanced features such as CI/CD, monitoring, metrics, etc.
-
-In order to deploy with dashboard, you need to first login with:
+In order to deploy the example, you need to run the following command:
 
 ```
-serverless login
-```
-
-install dependencies with:
-
-```
-npm install
-```
-
-and
-
-```
-pip install -r requirements.txt
-```
-
-and then perform deployment with:
-
-```
-serverless deploy
+$ serverless deploy
 ```
 
 After running deploy, you should see output similar to:
 
 ```bash
-Deploying aws-python-flask-api-project to stage dev (us-east-1)
+Deploying aws-python-project to stage dev (us-east-1)
 
-✔ Service deployed to stack aws-python-flask-api-project-dev (182s)
+✔ Service deployed to stack aws-python-project-dev (112s)
 
-endpoint: ANY - https://xxxxxxxx.execute-api.us-east-1.amazonaws.com
 functions:
-  api: aws-python-flask-api-project-dev-api (1.5 MB)
+  hello: aws-python-project-dev-hello (1.5 kB)
 ```
-
-_Note_: In current form, after deployment, your API is public and can be invoked by anyone. For production deployments, you might want to configure an authorizer. For details on how to do that, refer to [httpApi event docs](https://www.serverless.com/framework/docs/providers/aws/events/http-api/).
 
 ### Invocation
 
-After successful deployment, you can call the created application via HTTP:
+After successful deployment, you can invoke the deployed function by using the following command:
 
 ```bash
-curl https://xxxxxxx.execute-api.us-east-1.amazonaws.com/dev/
+serverless invoke --function hello
 ```
 
-Which should result in the following response:
+Which should result in response similar to the following:
 
-```
-{"message":"Hello from root!"}
-```
-
-Calling the `/hello` path with:
-
-```bash
-curl https://xxxxxxx.execute-api.us-east-1.amazonaws.com/dev/hello
-```
-
-Should result in the following response:
-
-```bash
-{"message":"Hello from path!"}
-```
-
-If you try to invoke a path or method that does not have a configured handler, e.g. with:
-
-```bash
-curl https://xxxxxxx.execute-api.us-east-1.amazonaws.com/dev/nonexistent
-```
-
-You should receive the following response:
-
-```bash
-{"error":"Not Found!"}
+```json
+{
+    "statusCode": 200,
+    "body": "{\"message\": \"Go Serverless v3.0! Your function executed successfully!\", \"input\": {}}"
+}
 ```
 
 ### Local development
 
-Thanks to capabilities of `serverless-wsgi`, it is also possible to run your application locally, however, in order to do that, you will need to first install `werkzeug` dependency, as well as all other dependencies listed in `requirements.txt`. It is recommended to use a dedicated virtual environment for that purpose. You can install all needed dependencies with the following commands:
+You can invoke your function locally by using the following command:
 
 ```bash
-pip install werkzeug
-pip install -r requirements.txt
+serverless invoke local --function hello
 ```
 
-At this point, you can run your application locally with the following command:
+Which should result in response similar to the following:
+
+```
+{
+    "statusCode": 200,
+    "body": "{\"message\": \"Go Serverless v3.0! Your function executed successfully!\", \"input\": {}}"
+}
+```
+
+### Bundling dependencies
+
+In case you would like to include third-party dependencies, you will need to use a plugin called `serverless-python-requirements`. You can set it up by running the following command:
 
 ```bash
-serverless wsgi serve
+serverless plugin install -n serverless-python-requirements
 ```
 
-For additional local development capabilities of `serverless-wsgi` plugin, please refer to corresponding [GitHub repository](https://github.com/logandk/serverless-wsgi).
+Running the above will automatically add `serverless-python-requirements` to `plugins` section in your `serverless.yml` file and add it as a `devDependency` to `package.json` file. The `package.json` file will be automatically created if it doesn't exist beforehand. Now you will be able to add your dependencies to `requirements.txt` file (`Pipfile` and `pyproject.toml` is also supported but requires additional configuration) and they will be automatically injected to Lambda package during build process. For more details about the plugin's configuration, please refer to [official documentation](https://github.com/UnitedIncome/serverless-python-requirements).
