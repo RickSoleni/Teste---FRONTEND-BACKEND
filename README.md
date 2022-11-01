@@ -14,8 +14,6 @@
 
 :small_blue_diamond: [Deploy da Aplicação](#deploy-da-aplicação-dash)
 
-:small_blue_diamond: [Pré-requisitos](#pré-requisitos)
-
 :small_blue_diamond: [Como rodar a aplicação](#como-rodar-a-aplicação-arrow_forward)
 
 ... 
@@ -42,7 +40,7 @@ Este README abrange o teste completo da empresa EDESOFT, tanto Front-end quanto 
 
 :heavy_check_mark: Listagem de Usuários  (Front-end)
 
-:heavy_check_mark: Recebimento de arquivo via requisição HTTP  (Back-end)
+:heavy_check_mark: Recebimento de bucket e nome de arquivo em função lambda  (Back-end)
 
 :heavy_check_mark: Leitura e tratamento de dados do arquivo CSV recebido  (Back-end)
 
@@ -50,56 +48,57 @@ Este README abrange o teste completo da empresa EDESOFT, tanto Front-end quanto 
 
 ## Deploy da Aplicação :dash:
 
-<p align="justify"> O front-end foi depurado na seguinte URL:
+<p align="justify"> O front-end foi deployado na seguinte URL:
 
 </p>
 
 > https://teste-frontend-indol.vercel.app/
 
-... 
-
-
-## Pré-requisitos
-
-:warning: [Node](https://nodejs.org/en/download/)
-
-
 ## Como rodar a aplicação :arrow_forward:
 
-No terminal, clone o projeto: 
+<h3>Front-End</h3>
+<p>No terminal, clone o projeto: 
 
 ```
-git clone https://github.com/RickSoleni/Teste---FRONTEND-BACKEND.git
+git clone git@github.com:RickSoleni/Teste---FRONTEND-BACKEND.git
+```
+Execute os seguintes comandos no terminal:
+```
+cd edesoft-frontend
+npm i
+npm start
+```
+## Como rodar a aplicação :arrow_forward:
+
+ <h3>Back-End</h3>
+ <p>No terminal, clone o projeto:
+
+```
+git clone git@github.com:RickSoleni/Teste---FRONTEND-BACKEND.git
+```
+Execute o seguinte comandos no terminal:
+```
+serverless invoke -f csvImporter -d '{"bucket_id": "id do bucket", "object_key": "nome do objeto"}'
 ```
 
-... 
+## Tecnologias utilizadas :books:
 
-Coloque um passo a passo para rodar a sua aplicação. **Dica: clone o próprio projeto e verfique se o passo a passo funciona**
+Front-end
 
-## Como rodar os testes
+<p><a href="https://reactjs.org/docs/getting-started.html">React</a>
+| <a href="https://redux-toolkit.js.org/">Redux Toolkit</a>
+| <a href="https://react-hook-form.com/get-started/">React-Hook-Form</a>
+| <a href="https://react.semantic-ui.com/">Semantic UI</a>
 
-Coloque um passo a passo para executar os testes
+Back-end
 
-```
-$ npm test, rspec, etc 
-```
-
-## Casos de Uso
-
-Explique com mais detalhes como a sua aplicação poderia ser utilizada. O uso de **gifs** aqui seria bem interessante. 
-
-Exemplo: Caso a sua aplicação tenha alguma funcionalidade de login apresente neste tópico os dados necessários para acessá-la.
-
-## Linguagens, dependencias e libs utilizadas :books:
-
-- [React](https://pt-br.reactjs.org/docs/create-a-new-react-app.html)
-- [React PDF](https://react-pdf.org/)
-
-...
-
+<p><a href="https://docs.python.org/3/">Python</a>
+| <a href="https://requests.readthedocs.io/en/latest/">Requests</a>
+| <a href="https://pymongo.readthedocs.io/en/stable/">Pymongo</a>
+| <a href="https://www.mongodb.com/docs/">MongoDB</a>
+| <a href="https://www.serverless.com/framework/docs">Serverless</a> 
+  
 
 ## Desenvolvedor :octocat:
 
 <a href="https://github.com/RickSoleni"> Ricardo Giantomaso </a>
-
-Copyright :copyright: 2022 - Teste de Back-end e Front-end
